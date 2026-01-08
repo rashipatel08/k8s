@@ -15,7 +15,7 @@ spec:
 
     app: web
 
-    version: blue
+    version: green
 
   ports:
 
