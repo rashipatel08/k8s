@@ -1,83 +1,70 @@
+# -----------------------------
+# Apache Deployment
+# -----------------------------
 apiVersion: apps/v1
-
 kind: Deployment
-
 metadata:
-
-  name: web-blue
-
+  name: apache-deploy
+  labels:
+    app: apache
 spec:
-
-  replicas: 3
-
+  replicas: 2   # HPA will control this
   selector:
-
     matchLabels:
-
-      app: web
-
-      version: blue
-
+      app: apache
   template:
-
     metadata:
-
       labels:
-
-        app: web
-
-        version: blue
-
+        app: apache
     spec:
-
       containers:
-
-      - name: web
-
-        image: nginx
-
+      - name: apache
+        image: httpd:2.4
         ports:
-
         - containerPort: 80
-
-        apiVersion: apps/v1
-
-kind: Deployment
-
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "256Mi"
+ 
+---
+# -----------------------------
+# Apache Service (LoadBalancer)
+# -----------------------------
+apiVersion: v1
+kind: Service
 metadata:
-
-  name: web-green
-
+  name: apache-service
 spec:
-
-  replicas: 3
-
+  type: LoadBalancer
   selector:
-
-    matchLabels:
-
-      app: web
-
-      version: green
-
-  template:
-
-    metadata:
-
-      labels:
-
-        app: web
-
-        version: green
-
-    spec:
-
-      containers:
-
-      - name: web
-
-        image: httpd
-
-        ports:
-
-        - containerPort: 80
+    app: apache
+  ports:
+  - port: 80
+    targetPort: 80
+ 
+---
+# -----------------------------
+# Horizontal Pod Autoscaler
+# -----------------------------
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: apache-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: apache-deploy
+  minReplicas: 2
+  maxReplicas: 6
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 50
