@@ -1,0 +1,13 @@
+*** Settings ***
+Library     DataDriver      file=C:/Users/Administrator/PycharmProjects/wiproroboframework/TestData/ddtLogindataCSV.csv     sheet_name=ddtLogindata
+
+Test Template       Login test
+
+*** Test Cases ***
+Login with User     ${username} and  ${password}
+
+
+*** Keywords ***
+Login test
+            [Arguments]     ${username}     ${password}
+            Log       username: ${username}, Password: ${password}
