@@ -1,0 +1,4 @@
+${options}=    Evaluate    sys.modules['selenium.webdriver'].FirefoxOptions()    sys
+Call Method    ${options}    add_argument    --headless
+Call Method    ${options}    add_argument    --no-sandbox
+Open Browser     https://the-internet.herokuapp.com/javascript_alerts    firefox    options=${options}
