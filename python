@@ -19,3 +19,53 @@ RTR1_MGR.close_session()
 
 
 https://github.com/ncclient/ncclient
+
+
+
+
+#!/data/Python_envs/Python3/bin/python3
+
+from ncclient import manager
+from lxml import etree
+from ncclient.transport.errors import SSHError, AuthenticationError, SessionCloseError
+
+# NETCONF device connection details
+HOST = '172.20.0.46'
+PORT = 830
+USERNAME = 'admin'
+PASSWORD = 'cisco'
+
+def get_running_config():
+    try:
+        # Establish NETCONF connection
+        with manager.connect(
+            host=HOST,
+            port=PORT,
+            username=USERNAME,
+            password=PASSWORD,
+            hostkey_verify=False,
+            device_params={'name': 'csr'},
+            timeout=30
+        ) as conn:
+
+            print("\nConnected to the device. Retrieving running configuration...\n")
+
+            # Get the full running configuration
+            config = conn.get_config(source='running')
+
+            # Pretty-print XML
+            xml_output = etree.tostring(
+                etree.fromstring(config.xml),
+                pretty_print=True
+            ).decode()
+
+            print("=== Running Configuration ===\n")
+            print(xml_output)
+
+    except (SSHError, AuthenticationError, SessionCloseError) as netconf_error:
+        print(f"NETCONF transport/authentication error: {netconf_error}")
+    except Exception as general_error:
+        print(f"An error occurred: {general_error}")
+
+if __name__ == '__main__':
+    get_running_config()
