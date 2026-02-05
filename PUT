@@ -1,0 +1,29 @@
+https://172.20.0.84/restconf/data/ietf-interfaces:interfaces/interface=Loopback10
+
+
+Accept        application/yang-data+json
+Content-Type  application/yang-data+json
+
+
+
+
+{
+  "ietf-interfaces:interfaces": {
+    "interface": [
+      {
+        "name": "Loopback10",
+        "description": "Loopback 10 using IETF YANG",
+        "type": "iana-if-type:softwareLoopback",
+        "enabled": true,
+        "ietf-ip:ipv4": {
+          "address": [
+            {
+              "ip": "11.11.11.11",
+              "netmask": "255.255.255.255"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
