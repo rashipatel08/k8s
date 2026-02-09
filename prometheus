@@ -1,1 +1,6 @@
 \nssm.exe install prometheus D:\Software\prometheus-3.9.1.windows-amd64\prometheus-3.9.1.windows-amd64\prometheus-3.9.1.windows-amd64\prometheus.exe
+
+
+
+
+https://github.com/prometheus-community/windows_exporter/releases
