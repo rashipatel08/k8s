@@ -13,3 +13,5 @@ https://sourceforge.net/projects/prometheus-snmp.mirror/files/v0.30.1/snmp_expor
 curl "http://localhost:9116/snmp?target=172.20.0.210&module=cisco_csr1000v"
 
 
+snmpwalk -v2c -c NMS 172.20.0.170
+
